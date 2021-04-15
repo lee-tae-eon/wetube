@@ -2,6 +2,7 @@
 export const home = (req, res) => res.render("home", { pageTitle: "home" });
 
 export const search = (req, res) => {
+  // local변수를 렌더링하여 템플릿에 사용하도록 하자
   const {
     query: { term: searchingBy },
   } = req;

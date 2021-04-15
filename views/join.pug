@@ -1,1 +1,6 @@
 extends layouts/main
+
+block content
+    .form__comtainer  
+        form(action="/login", method="post")
+            input(type="email", name="email", palceholder="Email")
