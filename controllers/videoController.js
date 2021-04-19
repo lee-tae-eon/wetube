@@ -1,5 +1,9 @@
+import { videos } from "../db";
+
 // render함수의 첫번째 인자는 template이고 두번째인자는 template에 추가할 정보가 담긴 객체
-export const home = (req, res) => res.render("home", { pageTitle: "home" });
+export const home = (req, res) => {
+  res.render("home", { pageTitle: "home", videos });
+};
 
 export const search = (req, res) => {
   // local변수를 렌더링하여 템플릿에 사용하도록 하자
@@ -8,9 +12,6 @@ export const search = (req, res) => {
   } = req;
   res.render("search", { pageTitle: "Search", searchingBy });
 };
-
-export const videos = (req, res) =>
-  res.render("videos", { pageTitle: "Videos" });
 
 export const upload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });

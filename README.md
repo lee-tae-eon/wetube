@@ -5,12 +5,12 @@ cloning Youtube with vanillaJS and nodeJS
 ## Pages:
 
 - [ ] Home
-- [ ] Join
-- [ ] login
+- [x] Join
+- [x] login
 - [x] search
 - [ ] User Detail
-- [ ] Edit profile
-- [ ] Change Password
-- [ ] Upload
+- [x] Edit profile
+- [x] Change Password
+- [x] Upload
 - [ ] Video Detail
-- [ ] Edit Video
+- [x] Edit Video

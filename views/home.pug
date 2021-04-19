@@ -1,5 +1,7 @@
 extends layouts/main
 
 block content 
-    .video 
-        h1 Video
+    .videos 
+        each video in videos 
+            h1= video.title
+            p= video.description
