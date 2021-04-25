@@ -27,6 +27,7 @@ export const postLogin = (req, res) => {
 };
 // 로그아웃시 홈화면으로 redirect
 export const logout = (req, res) => {
+  // todo: log out process
   res.redirect(routes.home);
 };
 
