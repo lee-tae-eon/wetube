@@ -1,4 +1,4 @@
-import { videos } from "../db";
+// import { videos } from "../db";
 import routes from "../routes";
 
 // render함수의 첫번째 인자는 template이고 두번째인자는 template에 추가할 정보가 담긴 객체
