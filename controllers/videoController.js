@@ -1,9 +1,15 @@
-// import { videos } from "../db";
 import routes from "../routes";
+import Video from "../models/Video";
 
 // render함수의 첫번째 인자는 template이고 두번째인자는 template에 추가할 정보가 담긴 객체
-export const home = (req, res) => {
-  res.render("home", { pageTitle: "home", videos });
+export const home = async (req, res) => {
+  try {
+    const videos = await Video.find({});
+    res.render("home", { pageTitle: "home", videos });
+  } catch (error) {
+    console.log(error);
+    res.render("home", { pageTitle: "home", videos: [] });
+  }
 };
 
 export const search = (req, res) => {
@@ -21,7 +27,7 @@ export const postUpload = (req, res) => {
   const {
     body: { file, title, description },
   } = req;
-  // todo : upload and save video
+
   // 가상의 비디오 id를 설정
   res.redirect(routes.videoDetail(324393));
 };
