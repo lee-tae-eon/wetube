@@ -12,11 +12,13 @@ export const home = async (req, res) => {
   }
 };
 
-export const search = (req, res) => {
+export const search = async (req, res) => {
   // local변수를 렌더링하여 템플릿에 사용하도록 하자
   const {
     query: { term: searchingBy },
   } = req;
+
+  const videos = await Video.find({});
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
@@ -42,9 +44,13 @@ export const videoDetail = async (req, res) => {
   const {
     params: { id },
   } = req;
-  const video = await Video.findById(id);
-  console.log(video);
-  res.render("videoDetail", { pageTitle: "VideoDetail" });
+  try {
+    const video = await Video.findById(id);
+    res.render("videoDetail", { pageTitle: "VideoDetail", video: video });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
 };
 
 export const editVideo = (req, res) =>
