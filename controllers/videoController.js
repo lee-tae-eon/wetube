@@ -23,17 +23,29 @@ export const search = (req, res) => {
 export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });
 
-export const postUpload = (req, res) => {
+export const postUpload = async (req, res) => {
   const {
-    body: { file, title, description },
+    body: { title, description },
+    file: { path },
   } = req;
-
+  const newVideo = await Video.create({
+    fileUrl: path,
+    title,
+    description,
+  });
+  console.log(newVideo);
   // 가상의 비디오 id를 설정
-  res.redirect(routes.videoDetail(324393));
+  res.redirect(routes.videoDetail(newVideo.id));
 };
 
-export const videoDetail = (req, res) =>
+export const videoDetail = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  const video = await Video.findById(id);
+  console.log(video);
   res.render("videoDetail", { pageTitle: "VideoDetail" });
+};
 
 export const editVideo = (req, res) =>
   res.render("editVideo", { pageTitle: "EditVideo" });
