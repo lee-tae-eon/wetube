@@ -23,7 +23,7 @@ videoRouter.post(routes.upload, uploadVideo, postUpload);
 videoRouter.get(routes.editVideo(), getEditVideo);
 videoRouter.post(routes.editVideo(), postEditVideo);
 // 삭제
-videoRouter.get(routes.deleteVideo, deleteVideo);
+videoRouter.get(routes.deleteVideo(), deleteVideo);
 // 상세페이지
 videoRouter.get(routes.videoDetail(), videoDetail);
 

@@ -4,7 +4,7 @@ import Video from "../models/Video";
 // render함수의 첫번째 인자는 template이고 두번째인자는 template에 추가할 정보가 담긴 객체
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({});
+    const videos = await Video.find({}).sort({ _id: -1 });
     res.render("home", { pageTitle: "home", videos });
   } catch (error) {
     console.log(error);
@@ -46,7 +46,10 @@ export const videoDetail = async (req, res) => {
   } = req;
   try {
     const video = await Video.findById(id);
-    res.render("videoDetail", { pageTitle: "VideoDetail", video: video });
+    res.render("videoDetail", {
+      pageTitle: video.title,
+      video: video,
+    });
   } catch (error) {
     console.log(error);
     res.redirect(routes.home);
@@ -80,5 +83,12 @@ export const postEditVideo = async (req, res) => {
   }
 };
 
-export const deleteVideo = (req, res) =>
-  res.render("deleteVideo", { pageTitle: "DeleteVideo" });
+export const deleteVideo = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    await Video.findOneAndDelete({ _id: id });
+  } catch (error) {}
+  res.redirect(routes.home);
+};
