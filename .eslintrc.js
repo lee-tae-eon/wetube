@@ -15,5 +15,6 @@ module.exports = {
     "spaced-comment": "off",
     "no-else-return": "off",
     "no-alert": "off",
+    "no-unused-vars": 0,
   },
 };

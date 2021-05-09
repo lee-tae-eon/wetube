@@ -5,12 +5,12 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // eslint-disab
 const path = require("path");
 
 module.exports = {
-  entry: "./client/js/main.js",
+  entry: ["babel-polyfill", "./client/js/main.js"],
   mode: "development",
   watch: true,
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "css/style.css",
+      filename: "css/styles.css",
     }),
   ],
   output: {
