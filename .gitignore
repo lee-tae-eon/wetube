@@ -117,3 +117,6 @@ uploads
 .yarn/install-state.gz
 .pnp.*
 package-lock.json
+
+# webpack assets file
+/assets

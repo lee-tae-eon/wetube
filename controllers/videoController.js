@@ -17,8 +17,16 @@ export const search = async (req, res) => {
   const {
     query: { term: searchingBy },
   } = req;
+  let videos = [];
+  try {
+    videos = await Video.find({
+      title: { $regex: searchingBy, $options: "i" },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 
-  const videos = await Video.find({});
+  // const videos = await Video.find({});
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
@@ -48,7 +56,7 @@ export const videoDetail = async (req, res) => {
     const video = await Video.findById(id);
     res.render("videoDetail", {
       pageTitle: video.title,
-      video: video,
+      video,
     });
   } catch (error) {
     console.log(error);
@@ -89,6 +97,8 @@ export const deleteVideo = async (req, res) => {
   } = req;
   try {
     await Video.findOneAndDelete({ _id: id });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
   res.redirect(routes.home);
 };
