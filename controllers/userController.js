@@ -39,9 +39,21 @@ export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home,
 });
 
+// 깃헙 로그인 사용자 깃헙으로 보내기 -위의 사용자 정의 로그인 방식 처럼 github로그인 방식을 사용하자
+export const githubLogin = passport.authenticate("github");
+
+// githubStrategy callback 컨트롤러
+export const githubLoginCallback = (accessToken, refreshToken, profile, cb) => {
+  console.log(accessToken, refreshToken, profile, cb);
+};
+// 인증이 완료되고 정보를 가지고 돌아오고서 웹에 로그인하게 되는 컨트롤러
+export const postGithubLogin = (req, res) => {
+  res.send(routes.home);
+};
+
 // 로그아웃시 홈화면으로 redirect
 export const logout = (req, res) => {
-  // todo: log out process
+  req.logout();
   res.redirect(routes.home);
 };
 
