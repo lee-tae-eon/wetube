@@ -1,6 +1,8 @@
 import routes from "../routes";
 import Video from "../models/Video";
 
+const fs = require("fs");
+
 // render함수의 첫번째 인자는 template이고 두번째인자는 template에 추가할 정보가 담긴 객체
 export const home = async (req, res) => {
   try {
@@ -44,7 +46,6 @@ export const postUpload = async (req, res) => {
     description,
   });
   // console.log(newVideo);
-  // 가상의 비디오 id를 설정
   res.redirect(routes.videoDetail(newVideo.id));
 };
 
@@ -95,8 +96,18 @@ export const deleteVideo = async (req, res) => {
   const {
     params: { id },
   } = req;
+  const filePath = await Video.findOne(
+    { _id: id },
+    { _id: false, fileUrl: true }
+  );
+  // const realPath = filePath.fileUrl;
   try {
     await Video.findOneAndDelete({ _id: id });
+    await fs.unlink(filePath.fileUrl, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
   } catch (error) {
     console.log(error);
   }
