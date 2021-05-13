@@ -24,7 +24,6 @@ export const postJoin = async (req, res, next) => {
       await User.register(user, password);
       next();
     } catch (error) {
-      console.log(error);
       res.redirect(routes.home);
     }
     // todo : log user in
@@ -79,8 +78,23 @@ export const logout = (req, res) => {
   res.redirect(routes.home);
 };
 
-export const userDetail = (req, res) =>
-  res.render("userDetail", { pageTitle: "UserDetail" });
+// 현재 로그안된 사용자 프로필 페이지 컨트롤러
+export const getMe = (req, res) => {
+  res.render("userDetail", { pageTitle: "UserDetail", user: req.user });
+};
+
+export const userDetail = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const user = await User.findById(id);
+    res.render("userDetail", { pageTitle: "UserDetail", user });
+  } catch (error) {
+    res.redirect(routes.home);
+  }
+};
+
 export const editProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "EditProfile" });
 export const changePassword = (req, res) =>
