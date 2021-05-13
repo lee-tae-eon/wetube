@@ -1,6 +1,10 @@
 import passport from "passport";
 import GithubStrategy from "passport-github";
-import { githubLoginCallback } from "./controllers/userController";
+import FacebookStrategy from "passport-facebook";
+import {
+  facebookLoginCallback,
+  githubLoginCallback,
+} from "./controllers/userController";
 import User from "./models/User";
 import routes from "./routes";
 
@@ -16,6 +20,18 @@ passport.use(
       callbackURL: `http://localhost:4000${routes.githubCallback}`,
     },
     githubLoginCallback
+  )
+);
+
+// facebook startegy 생성
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+      callbackURL: `http://localhost:4000${routes.facebookCallback}`,
+    },
+    facebookLoginCallback
   )
 );
 

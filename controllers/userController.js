@@ -30,6 +30,7 @@ export const postJoin = async (req, res, next) => {
   }
 };
 
+// local
 // get방식으로 화면만 뿌려줄 컨트롤러 하나와 post방식으로 로그인이 이루어지면 홈화면으로 전환시키는 컨트롤러 하나
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Login" });
@@ -38,6 +39,7 @@ export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home,
 });
 
+// GIT-HUB
 // 깃헙 로그인 사용자 깃헙으로 보내기 -위의 사용자 정의 로그인 방식 처럼 github로그인 방식을 사용하자
 export const githubLogin = passport.authenticate("github");
 
@@ -72,9 +74,21 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
-// 로그아웃시 홈화면으로 redirect
-export const logout = (req, res) => {
-  req.logout();
+// FACEBOOK
+// facebook 로그인 사용자 facebook으로 보내기  깃헙과 비슷하다
+export const facebookLogin = passport.authenticate("facebook");
+
+// facebook Strategy callback controller
+export const facebookLoginCallback = (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) => {
+  console.log(accessToken, refreshToken, profile, cb);
+};
+// facebook 인증 완료후 웹 로그인 하는 컨트롤러
+export const postFacebookLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
@@ -83,6 +97,7 @@ export const getMe = (req, res) => {
   res.render("userDetail", { pageTitle: "UserDetail", user: req.user });
 };
 
+// 프로필 페이지
 export const userDetail = async (req, res) => {
   const {
     params: { id },
@@ -99,3 +114,9 @@ export const editProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "EditProfile" });
 export const changePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "changePassword" });
+
+// 로그아웃시 홈화면으로 redirect
+export const logout = (req, res) => {
+  req.logout();
+  res.redirect(routes.home);
+};
