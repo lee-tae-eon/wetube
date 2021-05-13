@@ -74,21 +74,41 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
-// FACEBOOK
-// facebook 로그인 사용자 facebook으로 보내기  깃헙과 비슷하다
-export const facebookLogin = passport.authenticate("facebook");
+// kakaotalk
+// 카카오 로그인 요청시 카카오페이지로 보내주는 컨트롤러
+export const kakaoLogin = passport.authenticate("kakao");
 
-// facebook Strategy callback controller
-export const facebookLoginCallback = (
-  accessToken,
-  refreshToken,
-  profile,
-  cb
-) => {
-  console.log(accessToken, refreshToken, profile, cb);
+// 콜백 함수
+export const kakaoLoginCallback = async (_, __, profile, done) => {
+  const {
+    _json: {
+      id,
+      properties: { nickname, profile_image: profileImage },
+      kakao_account: { email },
+    },
+  } = profile;
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      user.kakaoId = id;
+      user.save();
+      return done(null, user);
+    } else {
+      const newUser = await User.create({
+        avatarUrl: profileImage,
+        kakaoId: id,
+        name: nickname,
+        email,
+      });
+      return done(null, newUser);
+    }
+  } catch (error) {
+    return done(error);
+  }
 };
-// facebook 인증 완료후 웹 로그인 하는 컨트롤러
-export const postFacebookLogin = (req, res) => {
+
+// 카카오톡 인증 완료후 콜백 실행 하고서 웹에 로그인하는 컨트롤러
+export const postKakaoLogin = (req, res) => {
   res.redirect(routes.home);
 };
 

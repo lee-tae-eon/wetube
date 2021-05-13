@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   email: String,
   //소셜 계정 스키마
   avatarUrl: String,
-  facebookId: Number,
+  kakaoId: Number,
   githubId: Number,
 });
 

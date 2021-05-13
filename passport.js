@@ -1,9 +1,9 @@
 import passport from "passport";
 import GithubStrategy from "passport-github";
-import FacebookStrategy from "passport-facebook";
+import KakaotalkStrategy from "passport-kakao";
 import {
-  facebookLoginCallback,
   githubLoginCallback,
+  kakaoLoginCallback,
 } from "./controllers/userController";
 import User from "./models/User";
 import routes from "./routes";
@@ -23,15 +23,15 @@ passport.use(
   )
 );
 
-// facebook startegy 생성
+// 카카오 startegy 생성
+
 passport.use(
-  new FacebookStrategy(
+  new KakaotalkStrategy(
     {
-      clientID: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: `http://localhost:4000${routes.facebookCallback}`,
+      clientID: process.env.KAKAO_ID,
+      callbackURL: `http://localhost:4000${routes.kakaoCallback}`,
     },
-    facebookLoginCallback
+    kakaoLoginCallback
   )
 );
 

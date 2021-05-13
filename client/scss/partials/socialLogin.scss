@@ -21,8 +21,13 @@
     background-color: $black;
     color: white;
   }
-  .social-login--facebook {
-    background-color: #3a5998;
-    color: white;
+  .social-login--kakaotalk {
+    background-color: #fee102;
+    color: black;
+    i {
+      border-radius: 7px;
+      border: 1px solid black;
+      padding: 5px;
+    }
   }
 }

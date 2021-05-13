@@ -100,7 +100,6 @@ export const deleteVideo = async (req, res) => {
     { _id: id },
     { _id: false, fileUrl: true }
   );
-  // const realPath = filePath.fileUrl;
   try {
     await Video.findOneAndDelete({ _id: id });
     await fs.unlink(filePath.fileUrl, (err) => {
