@@ -7,6 +7,8 @@ const fs = require("fs");
 // 그냥 화면에 뿌려줄 회원가입 페이지와 회원가입 정보 입력후 회원가입시 post할 컨트롤러 두개를 만든다.
 //  request는 post된 정보를 담은 객체로 담아지고 만약 비밀번호1과 2가 일치하지 않으면 400번 http status code 400번을 뿌려주고 회원가입 화면을 다시 뿌려준다
 // 제데로 이루어졌다면 유저정보를 db에 등록하고 유저 로그인이 이루어짐과 동시에 홈화면을 뿌려준다.
+
+// Join ----------------------------------------------------------
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Join" });
 };
@@ -32,7 +34,7 @@ export const postJoin = async (req, res, next) => {
   }
 };
 
-// local
+// local----------------------------------------------------------
 // get방식으로 화면만 뿌려줄 컨트롤러 하나와 post방식으로 로그인이 이루어지면 홈화면으로 전환시키는 컨트롤러 하나
 export const getLogin = (req, res) =>
   res.render("login", { pageTitle: "Login" });
@@ -41,7 +43,7 @@ export const postLogin = passport.authenticate("local", {
   successRedirect: routes.home,
 });
 
-// GIT-HUB
+// GIT-HUB----------------------------------------------------------
 // 깃헙 로그인 사용자 깃헙으로 보내기 -위의 사용자 정의 로그인 방식 처럼 github로그인 방식을 사용하자
 export const githubLogin = passport.authenticate("github");
 
@@ -76,7 +78,7 @@ export const postGithubLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
-// kakaotalk
+// kakaotalk----------------------------------------------------------
 // 카카오 로그인 요청시 카카오페이지로 보내주는 컨트롤러
 export const kakaoLogin = passport.authenticate("kakao");
 
@@ -114,12 +116,12 @@ export const postKakaoLogin = (req, res) => {
   res.redirect(routes.home);
 };
 
+// 프로필 페이지 ------------------------------------------------------
 // 현재 로그안된 사용자 프로필 페이지 컨트롤러
 export const getMe = (req, res) => {
   res.render("userDetail", { pageTitle: "UserDetail", user: req.user });
 };
 
-// 프로필 페이지
 export const userDetail = async (req, res) => {
   const {
     params: { id },
@@ -132,6 +134,8 @@ export const userDetail = async (req, res) => {
   }
 };
 
+// edit profile -----------------------------------------------
+
 export const getEditProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "EditProfile" });
 
@@ -142,11 +146,13 @@ export const postEditProfile = async (req, res) => {
   } = req;
   try {
     if (file) {
-      await fs.unlink(req.user.avatarUrl, (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      if (req.user.avatarUrl) {
+        await fs.unlink(req.user.avatarUrl, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+      }
       await User.findByIdAndUpdate(req.user.id, {
         name,
         email,
@@ -159,17 +165,38 @@ export const postEditProfile = async (req, res) => {
         avatarUrl: req.user.avatarUrl,
       });
     }
-
     res.redirect(routes.me);
   } catch (error) {
-    res.render("editProfile", { pageTitle: "Edit Profile" });
+    console.log(error);
+    res.redirect(`/users${routes.editProfile}`);
   }
 };
 // Todo : email 변경시 소셜계정이 뻑나는거 해결하기
 
-export const changePassword = (req, res) =>
+// change password----------------------------------------------------------
+export const getChangePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "changePassword" });
 
+export const postChangePassword = async (req, res) => {
+  const {
+    body: { oldPassword, newPassword, newPassword1 },
+  } = req;
+  try {
+    if (newPassword !== newPassword1) {
+      res.status(400);
+      res.redirect(`/users${routes.changePassword}`);
+      return;
+    } else {
+      await req.user.changePassword(oldPassword, newPassword);
+      res.redirect(routes.me);
+    }
+  } catch (error) {
+    res.status(400);
+    res.redirect(`/users${routes.changePassword}`);
+  }
+};
+
+// logout----------------------------------------------------------
 // 로그아웃시 홈화면으로 redirect
 export const logout = (req, res) => {
   req.logout();
