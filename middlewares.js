@@ -2,8 +2,11 @@ import multer from "multer";
 import routes from "./routes";
 
 const multerVideo = multer({ dest: "uploads/videos/" });
+const multerAvatar = multer({ dest: "uploads/avatars/" });
 
+// 컴퓨터에 직접 저장하는 방식은 추천하지 않는다.
 export const uploadVideo = multerVideo.single("videoFile");
+export const uploadAvatar = multerAvatar.single("avatar");
 
 export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "WeTube";

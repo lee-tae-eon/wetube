@@ -2,6 +2,8 @@ import passport from "passport";
 import routes from "../routes";
 import User from "../models/User";
 
+const fs = require("fs");
+
 // 그냥 화면에 뿌려줄 회원가입 페이지와 회원가입 정보 입력후 회원가입시 post할 컨트롤러 두개를 만든다.
 //  request는 post된 정보를 담은 객체로 담아지고 만약 비밀번호1과 2가 일치하지 않으면 400번 http status code 400번을 뿌려주고 회원가입 화면을 다시 뿌려준다
 // 제데로 이루어졌다면 유저정보를 db에 등록하고 유저 로그인이 이루어짐과 동시에 홈화면을 뿌려준다.
@@ -132,6 +134,39 @@ export const userDetail = async (req, res) => {
 
 export const getEditProfile = (req, res) =>
   res.render("editProfile", { pageTitle: "EditProfile" });
+
+export const postEditProfile = async (req, res) => {
+  const {
+    body: { name, email },
+    file,
+  } = req;
+  try {
+    if (file) {
+      await fs.unlink(req.user.avatarUrl, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+      await User.findByIdAndUpdate(req.user.id, {
+        name,
+        email,
+        avatarUrl: file.path,
+      });
+    } else {
+      await User.findByIdAndUpdate(req.user.id, {
+        name,
+        email,
+        avatarUrl: req.user.avatarUrl,
+      });
+    }
+
+    res.redirect(routes.me);
+  } catch (error) {
+    res.render("editProfile", { pageTitle: "Edit Profile" });
+  }
+};
+// Todo : email 변경시 소셜계정이 뻑나는거 해결하기
+
 export const changePassword = (req, res) =>
   res.render("changePassword", { pageTitle: "changePassword" });
 
