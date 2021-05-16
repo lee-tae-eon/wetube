@@ -3,7 +3,7 @@ extends layouts/main
 block content
     .user-profile 
         .user-profile__header
-            img.u-avatar(src=user.avatarUrl)
+            img.u-avatar(src=`/${user.avatarUrl}`)
             h4.profile__username.profile__info=user.name
             h4.profile__email.profile__info=`✉️  ${user.email}`
         if user.id === loggedUser.id
