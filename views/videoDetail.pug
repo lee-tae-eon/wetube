@@ -5,8 +5,8 @@ block content
         //- .video__area
         .video__player 
             video(src=`/${video.fileUrl}`, controls=true)
-        .video__info 
-            if video.creator.id === loggedUser.id
+        .video__info         
+            if video.creator.id === loggedUser.id.toString()
                 a(href=routes.editVideo(video.id)) 
                     button Edit Video
             h5.video__title=video.title
@@ -16,7 +16,7 @@ block content
                 span.video__views #{video.views} views
             p.video__description=video.description
             .video__author 
-                |Upload by
+                |Upload by                    
                 a(href=routes.userDetail(video.creator.id))=video.creator.name
         .video__comments 
             if video.comments.length === 1
