@@ -1,8 +1,10 @@
 import routes from "../routes";
 import Video from "../models/Video";
+import User from "../models/User";
 
 const fs = require("fs");
 
+// home controller--------------------------------------------------------
 // render함수의 첫번째 인자는 template이고 두번째인자는 template에 추가할 정보가 담긴 객체
 export const home = async (req, res) => {
   try {
@@ -14,6 +16,7 @@ export const home = async (req, res) => {
   }
 };
 
+// search controller--------------------------------------------------------
 export const search = async (req, res) => {
   // local변수를 렌더링하여 템플릿에 사용하도록 하자
   const {
@@ -32,6 +35,7 @@ export const search = async (req, res) => {
   res.render("search", { pageTitle: "Search", searchingBy, videos });
 };
 
+// video upload controller--------------------------------------------------------
 export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });
 
@@ -52,6 +56,7 @@ export const postUpload = async (req, res) => {
   res.redirect(routes.videoDetail(newVideo.id));
 };
 
+// video detail controller--------------------------------------------------------
 export const videoDetail = async (req, res) => {
   const {
     params: { id },
@@ -69,6 +74,7 @@ export const videoDetail = async (req, res) => {
   }
 };
 
+// video edit controller--------------------------------------------------------
 export const getEditVideo = async (req, res) => {
   const {
     params: { id },
@@ -100,6 +106,7 @@ export const postEditVideo = async (req, res) => {
   }
 };
 
+// video delete controller--------------------------------------------------------
 export const deleteVideo = async (req, res) => {
   const {
     params: { id },
@@ -113,7 +120,8 @@ export const deleteVideo = async (req, res) => {
     if (video.creator.toString() !== req.user.id) {
       throw Error();
     } else {
-      await Video.findOneAndDelete({ _id: id });
+      await User.findOneAndUpdate({ videos: id }, { $pull: { videos: id } });
+      await Video.findOneAndRemove({ _id: id });
       await fs.unlink(filePath.fileUrl, (err) => {
         if (err) {
           console.log(err);
