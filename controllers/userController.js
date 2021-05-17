@@ -118,8 +118,14 @@ export const postKakaoLogin = (req, res) => {
 
 // 프로필 페이지 ------------------------------------------------------
 // 현재 로그안된 사용자 프로필 페이지 컨트롤러
-export const getMe = (req, res) => {
-  res.render("userDetail", { pageTitle: "UserDetail", user: req.user });
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("videos");
+    res.render("userDetail", { pageTitle: "UserDetail", user });
+  } catch (error) {
+    console.log(error);
+    res.redirect(routes.home);
+  }
 };
 
 export const userDetail = async (req, res) => {
@@ -127,9 +133,12 @@ export const userDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("videos");
+    console.log(user);
     res.render("userDetail", { pageTitle: "UserDetail", user });
   } catch (error) {
+    console.log(error);
+    req.flash("error", "User not Found");
     res.redirect(routes.home);
   }
 };
