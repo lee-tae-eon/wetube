@@ -123,8 +123,15 @@ table {
   border-spacing: 0;
 }
 a {
-  color: inherit;
+  all: unset;
+  cursor: pointer;
 }
+
+*,
+input {
+  box-sizing: border-box;
+}
+
 input {
   border: none;
   box-sizing: border-box;
