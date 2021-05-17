@@ -8,6 +8,7 @@ const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("jsVolumeRange");
 
+//
 function handleScreenClick() {
   if (videoPlayer.paused) {
     videoPlayer.play();
@@ -31,6 +32,14 @@ function handlePlayClick() {
     playBtn.innerHTML = '<i class="fas fa-play"></i>';
   }
 }
+// play with space bar
+function handleScreenKeyUp(event) {
+  const { code: key } = event;
+  if (key === "Space") {
+    handleScreenClick();
+  }
+}
+
 // video sound button event
 function handleVolumeClick() {
   if (videoPlayer.muted) {
@@ -124,7 +133,14 @@ function handleVolumeDrag(event) {
 
 function init() {
   videoPlayer.volume = 0.5;
+  // space bar prevent default;
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && e.target === document.body) {
+      e.preventDefault();
+    }
+  });
   videoPlayer.addEventListener("click", handleScreenClick);
+  document.addEventListener("keyup", handleScreenKeyUp);
   playBtn.addEventListener("click", handlePlayClick);
   volumeBtn.addEventListener("click", handleVolumeClick);
   fullScreenBtn.addEventListener("click", makeFullScreen);
