@@ -13,10 +13,12 @@ function handleScreenClick() {
   if (videoPlayer.paused) {
     videoPlayer.play();
     screenPlay.innerHTML = '<i class="fas fa-pause"></i>';
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
     screenPlay.style.opacity = "0";
   } else {
     videoPlayer.pause();
     screenPlay.innerHTML = '<i class="fas fa-play"></i>';
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
     screenPlay.style.color = "white";
     screenPlay.style.opacity = "0.6";
   }
@@ -27,9 +29,14 @@ function handlePlayClick() {
   if (videoPlayer.paused) {
     videoPlayer.play();
     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    screenPlay.innerHTML = '<i class="fas fa-pause"></i>';
+    screenPlay.style.opacity = "0";
   } else {
     videoPlayer.pause();
     playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    screenPlay.innerHTML = '<i class="fas fa-play"></i>';
+    screenPlay.style.color = "white";
+    screenPlay.style.opacity = "0.6";
   }
 }
 // play with space bar
