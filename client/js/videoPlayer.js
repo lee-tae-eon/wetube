@@ -45,11 +45,31 @@ function handlePlayClick() {
   }
 }
 // play with space bar
-function handleScreenKeyUp(event) {
-  const { code: key } = event;
+// space bar prevent default function;
+function removeWindowPreventKey(e) {
+  if (e.code === "Space" && e.target === document.body) {
+    e.preventDefault();
+  }
+}
+function handlePlayKeyUp(event) {
+  const key = event.code;
   if (key === "Space") {
     handleScreenClick();
   }
+}
+function mouseLeaveVideo() {
+  window.removeEventListener("keydown", removeWindowPreventKey);
+  // eslint-disable-next-line no-use-before-define
+  videoPlayer.removeEventListener("mouseover", mouseOnVideo);
+  document.removeEventListener("keyup", handlePlayKeyUp);
+  // eslint-disable-next-line no-use-before-define
+  videoPlayer.addEventListener("mouseover", mouseOnVideo);
+}
+
+function mouseOnVideo() {
+  window.addEventListener("keydown", removeWindowPreventKey);
+  videoPlayer.addEventListener("mouseleave", mouseLeaveVideo);
+  document.addEventListener("keyup", handlePlayKeyUp);
 }
 
 // video sound button event
@@ -146,14 +166,8 @@ function handleVolumeDrag(event) {
 
 function init() {
   videoPlayer.volume = 0.5;
-  // space bar prevent default;
-  window.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && e.target === document.body) {
-      e.preventDefault();
-    }
-  });
   videoPlayer.addEventListener("click", handleScreenClick);
-  document.addEventListener("keyup", handleScreenKeyUp);
+  videoPlayer.addEventListener("mouseover", mouseOnVideo);
   playBtn.addEventListener("click", handlePlayClick);
   volumeBtn.addEventListener("click", handleVolumeClick);
   fullScreenBtn.addEventListener("click", makeFullScreen);
