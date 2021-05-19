@@ -29,9 +29,10 @@ const GITHUB_CALLBACK = "/auth/github/callback";
 const KAKAO = "/oauth/kakaotalk";
 const KAKAO_CALLBACK = "/oauth/kakaotalk/callback";
 
-//API
+//API view & comment
 const API = "/api";
 const REGISTER_VIEW = "/:id/view";
+const ADD_COMMENT = "/:id/comment";
 
 const routes = {
   home: HOME,
@@ -74,6 +75,7 @@ const routes = {
   },
   api: API,
   registerView: REGISTER_VIEW,
+  addComment: ADD_COMMENT,
   github: GITHUB,
   githubCallback: GITHUB_CALLBACK,
   me: ME,

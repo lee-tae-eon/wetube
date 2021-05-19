@@ -1,6 +1,7 @@
 import routes from "../routes";
 import Video from "../models/Video";
 import User from "../models/User";
+import Comment from "../models/Comment";
 
 const fs = require("fs");
 
@@ -144,4 +145,27 @@ export const registerView = async (req, res) => {
   video.views += 1;
   await video.save();
   return res.status(200);
+};
+
+export const postAddComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { comment },
+    user,
+  } = req;
+  try {
+    const video = await (
+      await Video.findById(id).populate("creator")
+    ).populated("comments");
+    const newComment = await Comment.create({
+      text: comment,
+      creator: user.id,
+    });
+    video.comments.push(newComment.id);
+    video.save();
+  } catch (error) {
+    res.status(404);
+  } finally {
+    res.end();
+  }
 };
