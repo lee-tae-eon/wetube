@@ -29,6 +29,10 @@ const GITHUB_CALLBACK = "/auth/github/callback";
 const KAKAO = "/oauth/kakaotalk";
 const KAKAO_CALLBACK = "/oauth/kakaotalk/callback";
 
+//API
+const API = "/api";
+const REGISTER_VIEW = "/:id/view";
+
 const routes = {
   home: HOME,
   join: JOIN,
@@ -68,6 +72,8 @@ const routes = {
       return DELETE_VIDEO;
     }
   },
+  api: API,
+  registerView: REGISTER_VIEW,
   github: GITHUB,
   githubCallback: GITHUB_CALLBACK,
   me: ME,
