@@ -64,7 +64,9 @@ export const videoDetail = async (req, res) => {
   } = req;
   try {
     // populate() - 객체를 가지고 오는 함수, Object Id타입에만 쓸 수 있다.
-    const video = await Video.findById(id).populate("creator");
+    const video = await Video.findById(id)
+      .populate("creator")
+      .populate("comments");
     res.render("videoDetail", {
       pageTitle: video.title,
       video,
@@ -153,19 +155,21 @@ export const postAddComment = async (req, res) => {
     body: { comment },
     user,
   } = req;
-  try {
-    const video = await (
-      await Video.findById(id).populate("creator")
-    ).populated("comments");
-    const newComment = await Comment.create({
-      text: comment,
-      creator: user.id,
-    });
-    video.comments.push(newComment.id);
-    video.save();
-  } catch (error) {
-    res.status(404);
-  } finally {
-    res.end();
+
+  const video = await Video.findById(id).populate("creator");
+
+  if (!video) {
+    return res.sendStatus(404);
   }
+  const newComment = await Comment.create({
+    text: comment,
+    creator: user.name,
+  });
+  video.comments.push(newComment);
+  video.save();
+  console.log(newComment.createAt.toLocaleString());
+  return res.status(200).json({
+    commentAuthor: user.name,
+    commentDate: newComment.createAt.toLocaleString(),
+  });
 };

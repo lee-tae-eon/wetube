@@ -8,15 +8,17 @@ const CommentSchema = new mongoose.Schema({
   createAt: {
     type: Date,
     default: Date.now,
+    required: true,
   },
   creator: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
+    required: true,
     ref: "User",
   },
-  //   video: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "Video",
-  //   },
+  video: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Video",
+  },
 });
 
 const model = mongoose.model("Comment", CommentSchema);
